@@ -1,0 +1,12 @@
+diff -up libpwquality-1.2.3/src/generate.c.generate-buf libpwquality-1.2.3/src/generate.c
+--- libpwquality-1.2.3/src/generate.c.generate-buf	2012-08-07 12:20:31.000000000 +0200
++++ libpwquality-1.2.3/src/generate.c	2017-11-15 11:16:50.954530937 +0100
+@@ -100,7 +100,7 @@ consume_entropy(char *buf, int bits, int
+ int
+ pwquality_generate(pwquality_settings_t *pwq, int entropy_bits, char **password)
+ {
+-        char entropy[PWQ_MAX_ENTROPY_BITS/8 + 1];
++        char entropy[(PWQ_MAX_ENTROPY_BITS+PWQ_MAX_ENTROPY_BITS/9)/8 + 2];
+         char *tmp;
+         int maxlen;
+         int try = 0;

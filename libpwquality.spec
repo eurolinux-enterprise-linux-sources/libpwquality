@@ -1,13 +1,15 @@
 Summary: A library for password generation and password quality checking
 Name: libpwquality
 Version: 1.2.3
-Release: 4%{?dist}
+Release: 5%{?dist}
 # The package is BSD licensed with option to relicense as GPLv2+
 # - this option is redundant as the BSD license allows that anyway.
 License: BSD or GPLv2+
 Group: System Environment/Base
-Source0: http://fedorahosted.org/releases/l/i/libpwquality/libpwquality-%{version}.tar.bz2
+Source0: https://github.com/libpwquality/libpwquality/releases/download/libpwquality-%{version}/libpwquality-%{version}.tar.bz2
 Patch1: libpwquality-1.2.3-translation-updates.patch
+Patch2: libpwquality-1.2.3-generate-buf.patch
+Patch3: libpwquality-1.2.3-settings.patch
 
 %global _pwqlibdir %{_libdir}
 %global _moduledir %{_libdir}/security
@@ -20,7 +22,7 @@ BuildRequires: gettext
 BuildRequires: pam-devel
 BuildRequires: python2-devel
 
-URL: http://libpwquality.fedorahosted.org/
+URL: https://github.com/libpwquality/libpwquality/
 
 # we don't want to provide private python extension libs
 %define __provides_exclude_from ^%{python_sitearch}/.*\.so$.
@@ -56,6 +58,8 @@ pronounceable passwords from Python applications.
 %prep
 %setup -q
 %patch1 -p2 -b .translations
+%patch2 -p1 -b .generate-buf
+%patch3 -p1 -b .settings
 
 %build
 %configure \
@@ -110,6 +114,10 @@ rm -f $RPM_BUILD_ROOT%{_moduledir}/*.la
 %{python_sitearch}/pwquality.so
 
 %changelog
+* Wed Nov 15 2017 Tomáš Mráz <tmraz@redhat.com> 1.2.3-5
+- fix brittle configuration settings (#1259633)
+- fix abort when generating large passwords on some architectures
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1.2.3-4
 - Mass rebuild 2014-01-24
 

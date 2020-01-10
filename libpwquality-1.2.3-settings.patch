@@ -1,0 +1,42 @@
+diff -up libpwquality-1.2.3/src/settings.c.settings libpwquality-1.2.3/src/settings.c
+--- libpwquality-1.2.3/src/settings.c.settings	2013-09-12 12:48:34.000000000 +0200
++++ libpwquality-1.2.3/src/settings.c	2017-11-15 11:31:52.860620974 +0100
+@@ -42,6 +42,7 @@ pwquality_free_settings(pwquality_settin
+ {
+         if (pwq) {
+                 free(pwq->dict_path);
++                free(pwq->bad_words);
+                 free(pwq);
+         }
+ }
+@@ -150,9 +151,11 @@ pwquality_read_config(pwquality_settings
+                 if (*ptr == '\0')
+                         continue;
+ 
++                eq = 0;
+                 name = ptr;
+                 while (*ptr != '\0') {
+-                        if (isspace(*ptr)) {
++                        if (isspace(*ptr) || *ptr == '=') {
++                                eq = *ptr == '=';
+                                 *ptr = '\0';
+                                 ++ptr;
+                                 break;
+@@ -160,7 +163,6 @@ pwquality_read_config(pwquality_settings
+                         ++ptr;
+                 }
+ 
+-                eq = 0;
+                 while (*ptr != '\0') {
+                         if (*ptr != '=' || eq) {
+                                 if (!isspace(*ptr)) {
+@@ -322,6 +324,9 @@ pwquality_get_int_value(pwquality_settin
+         case PWQ_SETTING_MAX_CLASS_REPEAT:
+                 *value = pwq->max_class_repeat;
+                 break;
++        case PWQ_SETTING_MAX_SEQUENCE:
++                *value = pwq->max_sequence;
++                break;
+         case PWQ_SETTING_GECOS_CHECK:
+                 *value = pwq->gecos_check;
+                 break;
