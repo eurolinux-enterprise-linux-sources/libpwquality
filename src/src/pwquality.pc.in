@@ -1,0 +1,5 @@
+Name: pwquality
+Description: Password quality checker
+Version: @PACKAGE_VERSION@
+Libs: -lpwquality
+Libs.private: -lcrack
