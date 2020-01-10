@@ -1,12 +1,13 @@
 Summary: A library for password generation and password quality checking
 Name: libpwquality
 Version: 1.2.3
-Release: 1%{?dist}
+Release: 4%{?dist}
 # The package is BSD licensed with option to relicense as GPLv2+
 # - this option is redundant as the BSD license allows that anyway.
 License: BSD or GPLv2+
 Group: System Environment/Base
 Source0: http://fedorahosted.org/releases/l/i/libpwquality/libpwquality-%{version}.tar.bz2
+Patch1: libpwquality-1.2.3-translation-updates.patch
 
 %global _pwqlibdir %{_libdir}
 %global _moduledir %{_libdir}/security
@@ -54,6 +55,7 @@ pronounceable passwords from Python applications.
 
 %prep
 %setup -q
+%patch1 -p2 -b .translations
 
 %build
 %configure \
@@ -61,6 +63,7 @@ pronounceable passwords from Python applications.
 	--with-pythonsitedir=%{python_sitearch} \
 	--disable-static
 
+make -C po update-gmo
 make %{?_smp_mflags}
 
 %install
@@ -107,6 +110,15 @@ rm -f $RPM_BUILD_ROOT%{_moduledir}/*.la
 %{python_sitearch}/pwquality.so
 
 %changelog
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1.2.3-4
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.2.3-3
+- Mass rebuild 2013-12-27
+
+* Fri Nov 29 2013 Tomáš Mráz <tmraz@redhat.com> 1.2.3-2
+- translation updates
+
 * Thu Sep 12 2013 Tomáš Mráz <tmraz@redhat.com> 1.2.3-1
 - fix problem with parsing the pam_pwquality options
   patch by Vladimir Sorokin.
